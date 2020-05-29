@@ -62,6 +62,21 @@ mixin _$HomeStore on _HomeStore, Store {
     });
   }
 
+  final _$errorMessageAtom = Atom(name: '_HomeStore.errorMessage');
+
+  @override
+  String get errorMessage {
+    _$errorMessageAtom.reportRead();
+    return super.errorMessage;
+  }
+
+  @override
+  set errorMessage(String value) {
+    _$errorMessageAtom.reportWrite(value, super.errorMessage, () {
+      super.errorMessage = value;
+    });
+  }
+
   final _$getUserDataAsyncAction = AsyncAction('_HomeStore.getUserData');
 
   @override
@@ -87,6 +102,7 @@ mixin _$HomeStore on _HomeStore, Store {
     return '''
 usermodel: ${usermodel},
 username: ${username},
+errorMessage: ${errorMessage},
 state: ${state}
     ''';
   }

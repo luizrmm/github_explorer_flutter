@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:github_app/models/user_model.dart';
 import 'package:github_app/repositories/user_repository.dart';
 import 'package:mobx/mobx.dart';
@@ -20,6 +21,9 @@ abstract class _HomeStore with Store {
   @observable
   String username = '';
 
+  @observable
+  String errorMessage = '';
+
   @action
   void setUsername(String value) => username = value;
 
@@ -35,11 +39,12 @@ abstract class _HomeStore with Store {
 
   @action
   Future getUserData(String username) async {
+    errorMessage = null;
     try {
       _userFuture = ObservableFuture(_userRepository.getUser(username));
       usermodel = await _userFuture;
     } catch (e) {
-      print(e);
+      errorMessage = e.response.data["message"];
     }
   }
 }

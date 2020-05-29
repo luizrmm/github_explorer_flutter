@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:github_app/stores/home_store.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
+import '../stores/home_store.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -11,9 +13,35 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final _searchController = TextEditingController();
+  List<ReactionDisposer> _disposers;
+
+  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
+  @override
+  void initState() {
+    var homeStore = Provider.of<HomeStore>(context, listen: false);
+
+    _disposers = [
+      reaction<String>(
+        (reaction) => homeStore.errorMessage,
+        (String errorMessage) {
+          _scaffoldKey.currentState.showSnackBar(
+            SnackBar(
+              backgroundColor: Colors.red[400],
+              content: Text(errorMessage),
+            ),
+          );
+        },
+      )
+    ];
+    super.initState();
+  }
+
   @override
   void dispose() {
     _searchController.dispose();
+    _disposers.forEach(
+      (dispose) => dispose(),
+    );
     super.dispose();
   }
 
@@ -23,6 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
     print('oi');
 
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         title: Text('Home'),
         centerTitle: true,
@@ -117,7 +146,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               Expanded(
                                 flex: 1,
                                 child: Text(
-                                  homeStore.usermodel.login,
+                                  homeStore.usermodel.login ?? "",
                                   style: GoogleFonts.notoSans(
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold,
@@ -127,7 +156,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               Expanded(
                                 flex: 3,
                                 child: Text(
-                                  homeStore.usermodel.name,
+                                  homeStore.usermodel.name ?? "",
                                   maxLines: 4,
                                   overflow: TextOverflow.clip,
                                   style: GoogleFonts.notoSans(
@@ -142,7 +171,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             height: 22.0,
                           ),
                           Text(
-                            homeStore.usermodel.bio,
+                            homeStore.usermodel.bio ?? "",
                             maxLines: 4,
                             overflow: TextOverflow.clip,
                             style: GoogleFonts.notoSans(
@@ -162,7 +191,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 color: Colors.red[300],
                               ),
                               Text(
-                                homeStore.usermodel.location,
+                                homeStore.usermodel.location ?? "",
                                 maxLines: 4,
                                 overflow: TextOverflow.clip,
                                 style: GoogleFonts.notoSans(
