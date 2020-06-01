@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:github_app/models/user_model.dart';
 import 'package:github_app/repositories/user_repository.dart';
 import 'package:mobx/mobx.dart';

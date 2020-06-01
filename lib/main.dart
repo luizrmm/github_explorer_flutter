@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:github_app/repositories/repos_repository.dart';
 import 'package:github_app/repositories/user_repository.dart';
 import 'package:github_app/screens/home_screen.dart';
 import 'package:github_app/stores/home_store.dart';
+import 'package:github_app/stores/repos_store.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -17,6 +19,9 @@ class MyApp extends StatelessWidget {
         Provider(
           create: (context) => HomeStore(UserRepository()),
         ),
+        Provider(
+          create: (context) => RepoStore(ReposRepository()),
+        )
       ],
       child: MaterialApp(
         title: 'Flutter Demo',

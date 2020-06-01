@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:github_app/screens/repositories_screen.dart';
 import 'package:github_app/stores/home_store.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mobx/mobx.dart';
@@ -79,6 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         elevation: 4,
                         child: TextField(
                           controller: _searchController,
+                          autofocus: false,
                           decoration: InputDecoration(
                             border: InputBorder.none,
                             hintText: "Pesquisar nome de usuário",
@@ -201,6 +203,21 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                               ),
                             ],
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(top: 20),
+                            child: RaisedButton(
+                              color: Colors.green,
+                              child: Text('Repositorios'),
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => RepositoriesScreen(),
+                                  ),
+                                );
+                              },
+                            ),
                           )
                         ],
                       );
